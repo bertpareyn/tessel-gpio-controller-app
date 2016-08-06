@@ -48,7 +48,7 @@ var startExpress = function(config, callback) {
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(express.static(config.ui.path));
 
-    http.createServer(app).listen(3000);
+    http.createServer(app).listen(process.env.PORT || 3000);
     callback(null, app);
 };
 
