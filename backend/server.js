@@ -22,42 +22,25 @@
  * SOFTWARE.
  */
 
-var config = require('./config').config;
-var db = require('./backend/db');
-var log = require('./backend/log').log;
-var server = require('./backend/server');
+var bodyParser = require('body-parser');
+var express = require('express');
+var http = require('http');
+var log = require('./log').log;
 
 /**
- * Start the server and all of its dependencies
+ * Start the server
  *
  * @param  {Object}     config          Configuration to start the server with
  * @param  {Function}   callback        Standard callback function
  * @param  {Object}     callback.err    Error object
  */
-initApplication = function(config, callback) {
-    // Initialize the server
-    server.startExpress(config, function(err) {
-        if (err) {
-            return callback(err);
-        }
+var startExpress = exports.startExpress = function(config, callback) {
+    log.info('Starting server');
+    var app = module.exports.app = express();
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(express.static(config.ui.path));
 
-        // Initialize the database connection
-        db.initDB(config, function(err) {
-            if (err) {
-                return callback(err);
-            }
-
-            callback(null);
-        });
-    });
+    http.createServer(app).listen(process.env.PORT || 3000);
+    callback(null, app);
 };
-
-initApplication(config, function(err) {
-    if (err) {
-        log.error(err, 'Server could not be started');
-    } else {
-        console.log(db.db);
-        log.info('Server started at http://localhost:'  + (process.env.PORT || 3000));
-        log.info('Shut down with CTRL + C');
-    }
-});

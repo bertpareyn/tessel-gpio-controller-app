@@ -22,42 +22,32 @@
  * SOFTWARE.
  */
 
-var config = require('./config').config;
-var db = require('./backend/db');
-var log = require('./backend/log').log;
-var server = require('./backend/server');
+var log = require('./log').log;
+var MongoClient = require('mongodb').MongoClient;
+
+// Initialize the shared DB object
+var db = false;
 
 /**
- * Start the server and all of its dependencies
+ * Initialise the connection to the MongoDB and make the resulting MongoClient object available
+ * to other modules that wish to do database operations
  *
- * @param  {Object}     config          Configuration to start the server with
+ * @param  {Object}     config          Configuration to initialize the DB with
  * @param  {Function}   callback        Standard callback function
  * @param  {Object}     callback.err    Error object
  */
-initApplication = function(config, callback) {
-    // Initialize the server
-    server.startExpress(config, function(err) {
+var initDB = exports.initDB = function(config, callback) {
+    var url = 'mongodb://' + config.db.user + ':' + config.db.password + '@' + config.db.url + ':' + config.db.port + '/' + config.db.db;
+    MongoClient.connect(url, function(err, _db) {
         if (err) {
             return callback(err);
         }
 
-        // Initialize the database connection
-        db.initDB(config, function(err) {
-            if (err) {
-                return callback(err);
-            }
+        // Export the open connections for anyone who needs it. Saves us the trouble of
+        // having to open a new connection on every operation.
+        db = exports.db = _db;
 
-            callback(null);
-        });
+        log.info("Successfully opened connection to MongoDB");
+        callback();
     });
 };
-
-initApplication(config, function(err) {
-    if (err) {
-        log.error(err, 'Server could not be started');
-    } else {
-        console.log(db.db);
-        log.info('Server started at http://localhost:'  + (process.env.PORT || 3000));
-        log.info('Shut down with CTRL + C');
-    }
-});

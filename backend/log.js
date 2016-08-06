@@ -24,24 +24,7 @@
 
 var bunyanFormatter = require('bunyan-format');
 var bunyanOutStream = bunyanFormatter({ outputMode: 'short' });
-var log = require('bunyan').createLogger({
+var log = exports.log = require('bunyan').createLogger({
     name: 'app',
     stream: bunyanOutStream
 });
-var MongoClient = require('mongodb').MongoClient;
-
-// Make the database connection available throughout the application
-var db = exports.db = null;
-
-var initDB = exports.initDB = function(config, callback) {
-    var url = 'mongodb://' + config.db.user + ':' + config.db.password + '@' + config.db.url + ':' + config.db.port + '/' + config.db.db;
-    MongoClient.connect(url, function(err, _db) {
-        if (err) {
-            return callback(err);
-        }
-
-        db = _db;
-        log.info("Successfully opened connection to MongoDB");
-        callback();
-    });
-};
