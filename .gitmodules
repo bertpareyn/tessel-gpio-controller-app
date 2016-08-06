@@ -1,0 +1,3 @@
+[submodule "SpaceInvaders"]
+	path = SpaceInvaders
+	url = https://github.com/bp323/SpaceInvaders.git
