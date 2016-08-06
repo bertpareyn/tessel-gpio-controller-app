@@ -32,6 +32,7 @@ var log = require('bunyan').createLogger({
     stream: bunyanOutStream
 });
 
+var db = require('./db');
 var config = require('./config').config;
 
 /**
@@ -66,7 +67,13 @@ initApplication = function(config, callback) {
             return callback(err);
         }
 
-        callback(null);
+        db.initDB(config, function(err) {
+            if (err) {
+                return callback(err);
+            }
+
+            callback(null);
+        });
     });
 };
 
@@ -74,7 +81,7 @@ initApplication(config, function(err) {
     if (err) {
         log.error(err, 'Server could not be started');
     } else {
-        log.info('Server started at http://127.0.0.1:3000');
+        log.info('Server started at http://localhost:'  + (process.env.PORT || 3000));
         log.info('Shut down with CTRL + C');
     }
 });

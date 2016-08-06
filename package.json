@@ -12,7 +12,8 @@
         "body-parser": "latest",
         "bunyan": "latest",
         "bunyan-format": "latest",
-        "express": "latest"
+        "express": "latest",
+        "mongodb": "latest"
     },
     "scripts": {
         "start": "node app.js"
