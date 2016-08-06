@@ -1,17 +1,20 @@
 {
-  "name": "gpicontrollerfrontend",
-  "version": "0.0.1",
-  "description": "GPIO Controller Frontend",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Bert Pareyn",
-  "license": "MIT",
-  "dependencies": {
+    "name": "gpicontrollerfrontend",
+    "version": "0.0.1",
+    "description": "GPIO Controller Frontend",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Bert Pareyn",
+    "license": "MIT",
+    "dependencies": {
         "body-parser": "latest",
         "bunyan": "latest",
         "bunyan-format": "latest",
         "express": "latest"
-  }
+    },
+    "scripts": {
+        "start": "node app.js"
+    }
 }
