@@ -25,6 +25,7 @@
 var config = require('./config').config;
 var db = require('./backend/db');
 var log = require('./backend/log').log;
+var routes = require('./backend/routes');
 var server = require('./backend/server');
 
 /**
@@ -41,13 +42,19 @@ initApplication = function(config, callback) {
             return callback(err);
         }
 
-        // Initialize the database connection
-        db.initDB(config, function(err) {
+        routes.registerRoutes(config, function(err) {
             if (err) {
                 return callback(err);
             }
 
-            callback(null);
+            // Initialize the database connection
+            db.initDB(config, function(err) {
+                if (err) {
+                    return callback(err);
+                }
+
+                callback(null);
+            });
         });
     });
 };
@@ -56,8 +63,7 @@ initApplication(config, function(err) {
     if (err) {
         log.error(err, 'Server could not be started');
     } else {
-        console.log(db.db);
-        log.info('Server started at http://localhost:'  + (process.env.PORT || 3000));
+        log.info('Successfully started server at http://localhost:'  + (process.env.PORT || 3000));
         log.info('Shut down with CTRL + C');
     }
 });

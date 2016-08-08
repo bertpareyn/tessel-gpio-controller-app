@@ -32,9 +32,9 @@ var db = false;
  * Initialise the connection to the MongoDB and make the resulting MongoClient object available
  * to other modules that wish to do database operations
  *
- * @param  {Object}     config          Configuration to initialize the DB with
- * @param  {Function}   callback        Standard callback function
- * @param  {Object}     callback.err    Error object
+ * @param  {Object}     config            Configuration to initialize the DB with
+ * @param  {Function}   callback          Standard callback function
+ * @param  {Object}     [callback.err]    Error object, if any
  */
 var initDB = exports.initDB = function(config, callback) {
     var url = 'mongodb://' + config.db.user + ':' + config.db.password + '@' + config.db.url + ':' + config.db.port + '/' + config.db.db;
@@ -49,5 +49,64 @@ var initDB = exports.initDB = function(config, callback) {
 
         log.info("Successfully opened connection to MongoDB");
         callback();
+    });
+};
+
+/**
+ * Retrieve the top 10 scores from the database
+ *
+ * @param  {Function} callback             Standard callback function
+ * @param  {Object}   [callback.error]     The error object, if any
+ * @param  {Object}   callback.result      The top 10 scores
+ */
+var getScores = exports.getScores = function(callback) {
+    // Get the scores collection
+    var col = db.collection('scores');
+    // Find the top 10 scores
+    col.aggregate([
+        {
+            $sort : {
+                    score : -1
+            }
+        },
+        {
+            $limit : 10
+        }
+    ]).toArray(function(err, docs) {
+        if (err) {
+            return callback(err);
+        }
+
+        log.info("Retrieved score from the database");
+
+        callback(null, docs);
+    });
+};
+
+/**
+ * Post a score to the database
+ *
+ * @param  {Object}   doc                  The score object to store in the database
+ * @param  {String}   doc.displayName      The name of the player
+ * @param  {Number}   doc.score            The score of the player
+ * @param  {Function} callback             Standard callback function
+ * @param  {Object}   [callback.error]     The error object, if any
+ * @param  {Object[]} callback.result      The inserted document
+ */
+var postScore = exports.postScore = function(doc, callback) {
+    // Get the scores collection
+    var col = db.collection('scores');
+    // Insert the score
+    col.insert({
+        'displayName': doc.displayName,
+        'score': parseInt(doc.score, 10)
+    }, function(err, result) {
+        if (err) {
+            return callback(err);
+        }
+
+        log.info("Inserted score in the database");
+
+        callback(null, result);
     });
 };

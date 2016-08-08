@@ -22,25 +22,50 @@
  * SOFTWARE.
  */
 
-var bodyParser = require('body-parser');
-var express = require('express');
-var http = require('http');
+var db = require('./db');
 var log = require('./log').log;
+var server = require('./server');
 
 /**
- * Start the server
+ * Start the server and all of its dependencies
  *
  * @param  {Object}     config          Configuration to start the server with
  * @param  {Function}   callback        Standard callback function
  * @param  {Object}     callback.err    Error object
  */
-var startExpress = exports.startExpress = function(config, callback) {
-    log.info('Starting server');
-    var app = exports.app = express();
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(express.static(config.ui.path));
+registerRoutes = exports.registerRoutes = function(config, callback) {
 
-    http.createServer(app).listen(process.env.PORT || 3000);
-    callback(null, app);
+    // Handle get requests for the /scores endpoint and return the top 10 scores
+    server.app.get('/scores', function(req, res) {
+        db.getScores(function(err, scores) {
+            if (err) {
+                res.status(500).send("Could not retrieve scores");
+            }
+
+            res.status(200).send(scores);
+        });
+    });
+
+    // Handle post requests to the /scores endpoint and store the score that's passed along
+    server.app.post('/scores', function(req, res) {
+        // Create the score in the database
+        db.postScore(req.body.score, function(err) {
+            if (err) {
+                res.status(500).send("Could not post score");
+            }
+
+            // Return the top 10
+            db.getScores(function(err, scores) {
+                if (err) {
+                    res.status(500).send("Could not retrieve scores");
+                }
+
+                res.status(200).send(scores);
+            });
+        });
+    });
+
+    log.info('Successfully registered route handlers');
+
+    callback();
 };
