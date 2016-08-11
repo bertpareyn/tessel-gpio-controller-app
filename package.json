@@ -4,11 +4,12 @@
     "description": "GPIO Controller App",
     "main": "app.js",
     "scripts": {
-        "test": "istanbul cover _mocha -- -R spec tests/"
+        "test": "istanbul cover _mocha --report lcovonly -- -R spec tests/ && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
     },
     "author": "Bert Pareyn",
     "license": "MIT",
     "dependencies": {
+        "coveralls": "latest",
         "body-parser": "latest",
         "bunyan": "latest",
         "bunyan-format": "latest",

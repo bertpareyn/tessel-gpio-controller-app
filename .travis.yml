@@ -15,8 +15,5 @@ before_install:
 script:
   - istanbul cover _mocha -- -R spec tests/
 
-after_success:
-- coveralls
-
 services:
   - mongodb
