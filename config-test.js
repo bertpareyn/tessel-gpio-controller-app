@@ -22,34 +22,50 @@
  * SOFTWARE.
  */
 
-var bodyParser = require('body-parser');
-var express = require('express');
-var http = require('http');
-var log = require('./log').log;
+var config = module.exports.config = {};
 
-/**
- * Start the server
- *
- * @param  {Object}     config          Configuration to start the server with
- * @param  {Function}   callback        Standard callback function
- * @param  {Object}     callback.err    Error object
- */
-var startExpress = exports.startExpress = function(config, callback) {
-    /* istanbul ignore if */
-    if (!config) {
-        return callback('Expecting a config object to start up the server with');
-    }
-    /* istanbul ignore if */
-    if (!config.ui || !config.ui.path) {
-        return callback('Expecting config.ui.path configuration property to start up the server with');
-    }
+config.ui = {
+    'path': './SpaceInvaders'
+};
 
-    log.info('Starting server');
-    var app = exports.app = express();
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(express.static(config.ui.path));
+config.debug = {
+    'url': 'http://localhost',
+    'port': 3000
+};
 
-    http.createServer(app).listen(process.env.PORT || 3000);
-    callback(null, app);
+config.db = {
+    'url': 'localhost',
+    'port': '27017',
+    'db': 'gpiotest',
+    'dummyScores': [{
+        "displayName": "Spider Man",
+        "score": 0
+    }, {
+        "displayName": "Wolverine",
+        "score": 600
+    }, {
+        "displayName": "Hulk",
+        "score": 500
+    }, {
+        "displayName": "Thor",
+        "score": 400
+    }, {
+        "displayName": "Doctor Strange",
+        "score": 700
+    }, {
+        "displayName": "Captain America",
+        "score": 300
+    }, {
+        "displayName": "Wanda Maximoff",
+        "score": 800
+    }, {
+        "displayName": "Daredevil",
+        "score": 200
+    }, {
+        "displayName": "Iron Man",
+        "score": 900
+    }, {
+        "displayName": "Black Widow",
+        "score": 100
+    }]
 };

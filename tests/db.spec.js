@@ -21,35 +21,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-var bodyParser = require('body-parser');
-var express = require('express');
-var http = require('http');
-var log = require('./log').log;
-
-/**
- * Start the server
- *
- * @param  {Object}     config          Configuration to start the server with
- * @param  {Function}   callback        Standard callback function
- * @param  {Object}     callback.err    Error object
- */
-var startExpress = exports.startExpress = function(config, callback) {
-    /* istanbul ignore if */
-    if (!config) {
-        return callback('Expecting a config object to start up the server with');
-    }
-    /* istanbul ignore if */
-    if (!config.ui || !config.ui.path) {
-        return callback('Expecting config.ui.path configuration property to start up the server with');
-    }
-
-    log.info('Starting server');
-    var app = exports.app = express();
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(express.static(config.ui.path));
-
-    http.createServer(app).listen(process.env.PORT || 3000);
-    callback(null, app);
-};

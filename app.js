@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-var config = require('./config').config;
+var config = require('./config-test').config;
 var db = require('./backend/db');
 var log = require('./backend/log').log;
 var routes = require('./backend/routes');
@@ -38,17 +38,20 @@ var server = require('./backend/server');
 initApplication = function(config, callback) {
     // Initialize the server
     server.startExpress(config, function(err) {
+        /* istanbul ignore if */
         if (err) {
             return callback(err);
         }
 
         routes.registerRoutes(config, function(err) {
+            /* istanbul ignore if */
             if (err) {
                 return callback(err);
             }
 
             // Initialize the database connection
             db.initDB(config, function(err) {
+                /* istanbul ignore if */
                 if (err) {
                     return callback(err);
                 }
@@ -60,6 +63,7 @@ initApplication = function(config, callback) {
 };
 
 initApplication(config, function(err) {
+    /* istanbul ignore if */
     if (err) {
         log.error(err, 'Server could not be started');
     } else {

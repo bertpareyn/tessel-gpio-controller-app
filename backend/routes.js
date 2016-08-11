@@ -38,8 +38,9 @@ registerRoutes = exports.registerRoutes = function(config, callback) {
     // Handle get requests for the /scores endpoint and return the top 10 scores
     server.app.get('/scores', function(req, res) {
         db.getScores(function(err, scores) {
+            /* istanbul ignore if */
             if (err) {
-                res.status(500).send("Could not retrieve scores");
+                return res.status(400).send(err);
             }
 
             res.status(200).send(scores);
@@ -51,13 +52,14 @@ registerRoutes = exports.registerRoutes = function(config, callback) {
         // Create the score in the database
         db.postScore(req.body.score, function(err) {
             if (err) {
-                res.status(500).send("Could not post score");
+                return res.status(400).send(err);
             }
 
             // Return the top 10
             db.getScores(function(err, scores) {
+                /* istanbul ignore if */
                 if (err) {
-                    res.status(500).send("Could not retrieve scores");
+                    return res.status(400).send(err);
                 }
 
                 res.status(200).send(scores);

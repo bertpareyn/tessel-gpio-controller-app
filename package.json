@@ -1,10 +1,10 @@
 {
-    "name": "gpicontrollerfrontend",
+    "name": "gpiocontrollerapp",
     "version": "0.0.1",
-    "description": "GPIO Controller Frontend",
+    "description": "GPIO Controller App",
     "main": "app.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "istanbul cover _mocha -- -R spec tests/"
     },
     "author": "Bert Pareyn",
     "license": "MIT",
@@ -14,6 +14,12 @@
         "bunyan-format": "latest",
         "express": "latest",
         "mongodb": "latest"
+    },
+    "devDependencies": {
+        "istanbul": "latest",
+        "mocha": "latest",
+        "should": "latest",
+        "supertest": "latest"
     },
     "scripts": {
         "start": "node app.js"

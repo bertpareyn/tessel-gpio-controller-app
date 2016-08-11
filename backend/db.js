@@ -37,8 +37,24 @@ var db = false;
  * @param  {Object}     [callback.err]    Error object, if any
  */
 var initDB = exports.initDB = function(config, callback) {
-    var url = 'mongodb://' + config.db.user + ':' + config.db.password + '@' + config.db.url + ':' + config.db.port + '/' + config.db.db;
+    if (!config || !config.db) {
+        return callback('Expecting a config object to start up the server with');
+    } else {
+        if (!config.db.url) {
+            return callback('Expecting config.db.url configuration property to start up the server with');
+        }
+        if (!config.db.port) {
+            return callback('Expecting config.db.port configuration property to start up the server with');
+        }
+        if (!config.db.db) {
+            return callback('Expecting config.db.db configuration property to start up the server with');
+        }
+    }
+
+    var auth = config.db.user ? config.db.user + ':' + config.db.password + '@' : '';
+    var url = 'mongodb://' + auth + config.db.url + ':' + config.db.port + '/' + config.db.db;
     MongoClient.connect(url, function(err, _db) {
+        /* istanbul ignore if */
         if (err) {
             return callback(err);
         }
@@ -73,6 +89,7 @@ var getScores = exports.getScores = function(callback) {
             $limit : 10
         }
     ]).toArray(function(err, docs) {
+        /* istanbul ignore if */
         if (err) {
             return callback(err);
         }
@@ -94,6 +111,22 @@ var getScores = exports.getScores = function(callback) {
  * @param  {Object[]} callback.result      The inserted document
  */
 var postScore = exports.postScore = function(doc, callback) {
+    if (!doc) {
+        return callback('A document should be specified');
+    }
+    if (!doc.displayName) {
+        return callback('A name for the player should be specified');
+    }
+    if (!doc.score && doc.score !== 0) {
+        return callback('A score for the player should be specified');
+    }
+    /* istanbul ignore else */
+    if (isNaN(parseInt(doc.score, 10))) {
+        return callback('A score for the player should be specified as a Number');
+    }
+
+    doc.score = isNaN(parseInt(doc.score, 10));
+
     // Get the scores collection
     var col = db.collection('scores');
     // Insert the score
@@ -101,6 +134,7 @@ var postScore = exports.postScore = function(doc, callback) {
         'displayName': doc.displayName,
         'score': parseInt(doc.score, 10)
     }, function(err, result) {
+        /* istanbul ignore if */
         if (err) {
             return callback(err);
         }
