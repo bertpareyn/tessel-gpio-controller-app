@@ -21,3 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+var server = require('../backend/server');
+var should = require('should');
+
+describe('Server', function() {
+    describe('Start server', function() {
+        it('should validate the configuration is passed in', function(done) {
+            server.startExpress(null, function(err) {
+                err.should.be.equal('Expecting a config object to start up the server with');
+                done();
+            });
+        });
+
+        it('should validate the server configuration has a `ui` property', function(done) {
+            server.startExpress({
+                'notui': 'fail'
+            }, function(err) {
+                err.should.be.equal('Expecting config.ui.path configuration property to start up the server with');
+                done();
+            });
+        });
+
+        it('should validate the server configuration `ui` object has a `path` property', function(done) {
+            server.startExpress({
+                'ui': {
+                    'notpath': ''
+                }
+            }, function(err) {
+                err.should.be.equal('Expecting config.ui.path configuration property to start up the server with');
+                done();
+            });
+        });
+    });
+});

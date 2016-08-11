@@ -53,7 +53,6 @@ var initDB = exports.initDB = function(config, callback) {
     var auth = config.db.user ? config.db.user + ':' + config.db.password + '@' : '';
     var url = 'mongodb://' + auth + config.db.url + ':' + config.db.port + '/' + config.db.db;
     MongoClient.connect(url, function(err, _db) {
-        /* istanbul ignore if */
         if (err) {
             return callback('Could not connect to the Mongo DB');
         }

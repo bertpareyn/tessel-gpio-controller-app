@@ -35,11 +35,9 @@ var log = require('./log').log;
  * @param  {Object}     callback.err    Error object
  */
 var startExpress = exports.startExpress = function(config, callback) {
-    /* istanbul ignore if */
     if (!config) {
         return callback('Expecting a config object to start up the server with');
     }
-    /* istanbul ignore if */
     if (!config.ui || !config.ui.path) {
         return callback('Expecting config.ui.path configuration property to start up the server with');
     }
