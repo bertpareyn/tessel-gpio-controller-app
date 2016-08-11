@@ -21,3 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+var log = require('../backend/log');
+var should = require('should');
+
+describe('Logging', function() {
+    describe('Expose logging', function() {
+        it('should expose a log object', function(done) {
+            log.log.should.be.ok();
+            done();
+        });
+
+        it('should expose a `info` function on the log object', function(done) {
+            log.log.info.should.be.ok();
+            done();
+        });
+
+        it('should expose a `warn` function on the log object', function(done) {
+            log.log.warn.should.be.ok();
+            done();
+        });
+
+        it('should expose a `error` function on the log object', function(done) {
+            log.log.error.should.be.ok();
+            done();
+        });
+    });
+});

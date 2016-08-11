@@ -35,7 +35,7 @@ describe('Database', function() {
             });
         });
 
-        it('should validate the Mongo configuration object has a db object', function(done) {
+        it('should validate the Mongo configuration object has a `db` object', function(done) {
             db.initDB({
                 'something': 'else'
             }, function(err) {
@@ -44,7 +44,7 @@ describe('Database', function() {
             });
         });
 
-        it('should validate the Mongo configuration db object has a url property', function(done) {
+        it('should validate the Mongo configuration `db` object has a `url` property', function(done) {
             db.initDB({
                 'db': {
                     'port': '27017',
@@ -56,7 +56,7 @@ describe('Database', function() {
             });
         });
 
-        it('should validate the Mongo configuration db object has a port property', function(done) {
+        it('should validate the Mongo configuration `db` object has a `port` property', function(done) {
             db.initDB({
                 'db': {
                     'url': 'localhost',
@@ -68,7 +68,7 @@ describe('Database', function() {
             });
         });
 
-        it('should validate the Mongo configuration db object has a db property', function(done) {
+        it('should validate the Mongo configuration `db` object has a `db` property', function(done) {
             db.initDB({
                 'db': {
                     'url': 'localhost',

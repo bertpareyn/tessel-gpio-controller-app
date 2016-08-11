@@ -67,12 +67,12 @@ describe('Routing', function() {
                         throw err;
                     }
 
-                    res.body.length.should.be.equal(10);
+                    res.body.length.should.be.exactly(10);
                     done();
                 });
         });
 
-        it('should return in descending score order', function(done) {
+        it('should return in descending `score` order', function(done) {
             supertest(debugUrl)
                 .get('/scores')
                 .end(function(err, res) {
@@ -161,7 +161,7 @@ describe('Routing', function() {
                 });
         });
 
-        it('should validate the document displayName', function(done) {
+        it('should validate the document `displayName`', function(done) {
             supertest(debugUrl)
                 .post('/scores')
                 .send({
@@ -180,7 +180,7 @@ describe('Routing', function() {
                 });
         });
 
-        it('should validate the document score', function(done) {
+        it('should validate the document `score`', function(done) {
             supertest(debugUrl)
                 .post('/scores')
                 .send({
