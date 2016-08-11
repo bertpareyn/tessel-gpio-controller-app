@@ -21,3 +21,81 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+var db = require('../backend/db');
+var should = require('should');
+
+describe('Database', function() {
+
+    describe('Initialize MongoDB', function() {
+        it('should validate the Mongo configuration is passed in', function(done) {
+            db.initDB(null, function(err) {
+                err.should.be.equal('Expecting a config object to start up the server with');
+                done();
+            });
+        });
+
+        it('should validate the Mongo configuration object has a db object', function(done) {
+            db.initDB({
+                'something': 'else'
+            }, function(err) {
+                err.should.be.equal('Expecting a config object to start up the server with');
+                done();
+            });
+        });
+
+        it('should validate the Mongo configuration db object has a url property', function(done) {
+            db.initDB({
+                'db': {
+                    'port': '27017',
+                    'db': 'gpiotest'
+                }
+            }, function(err) {
+                err.should.be.equal('Expecting config.db.url configuration property to start up the server with');
+                done();
+            });
+        });
+
+        it('should validate the Mongo configuration db object has a port property', function(done) {
+            db.initDB({
+                'db': {
+                    'url': 'localhost',
+                    'db': 'gpiotest'
+                }
+            }, function(err) {
+                err.should.be.equal('Expecting config.db.port configuration property to start up the server with');
+                done();
+            });
+        });
+
+        it('should validate the Mongo configuration db object has a db property', function(done) {
+            db.initDB({
+                'db': {
+                    'url': 'localhost',
+                    'port': '27017'
+                }
+            }, function(err) {
+                err.should.be.equal('Expecting config.db.db configuration property to start up the server with');
+                done();
+            });
+        });
+
+        it('should validate the Mongo user credentials are applied', function(done) {
+            db.initDB({
+                'db': {
+                    'url': 'localhost',
+                    'port': '27017',
+                    'db': 'gpiotest',
+                    'user': 'nonexisting',
+                    'password': 'somepassword'
+                }
+            }, function(err) {
+                /**
+                 * TODO: Add an actual Mongo DB user on the file system and check against that.
+                 */
+                err.should.be.equal('Could not connect to the Mongo DB');
+                done();
+            });
+        });
+    });
+});

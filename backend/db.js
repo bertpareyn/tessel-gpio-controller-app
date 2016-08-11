@@ -39,16 +39,15 @@ var db = false;
 var initDB = exports.initDB = function(config, callback) {
     if (!config || !config.db) {
         return callback('Expecting a config object to start up the server with');
-    } else {
-        if (!config.db.url) {
-            return callback('Expecting config.db.url configuration property to start up the server with');
-        }
-        if (!config.db.port) {
-            return callback('Expecting config.db.port configuration property to start up the server with');
-        }
-        if (!config.db.db) {
-            return callback('Expecting config.db.db configuration property to start up the server with');
-        }
+    }
+    if (!config.db.url) {
+        return callback('Expecting config.db.url configuration property to start up the server with');
+    }
+    if (!config.db.port) {
+        return callback('Expecting config.db.port configuration property to start up the server with');
+    }
+    if (!config.db.db) {
+        return callback('Expecting config.db.db configuration property to start up the server with');
     }
 
     var auth = config.db.user ? config.db.user + ':' + config.db.password + '@' : '';
@@ -56,7 +55,7 @@ var initDB = exports.initDB = function(config, callback) {
     MongoClient.connect(url, function(err, _db) {
         /* istanbul ignore if */
         if (err) {
-            return callback(err);
+            return callback('Could not connect to the Mongo DB');
         }
 
         // Export the open connections for anyone who needs it. Saves us the trouble of
