@@ -123,8 +123,6 @@ var postScore = exports.postScore = function(doc, callback) {
         return callback('A score for the player should be specified as a Number');
     }
 
-    doc.score = isNaN(parseInt(doc.score, 10));
-
     // Get the scores collection
     var col = db.collection('scores');
     // Insert the score
