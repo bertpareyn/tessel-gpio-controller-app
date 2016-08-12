@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-var config = require('./config-test').config;
+var config = require('config').config;
 var db = require('./backend/db');
 var log = require('./backend/log').log;
 var routes = require('./backend/routes');

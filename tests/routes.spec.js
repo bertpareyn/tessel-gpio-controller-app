@@ -25,16 +25,21 @@
 var should = require('should');
 var supertest = require('supertest');
 var MongoClient = require('mongodb').MongoClient;
+var mock = require('mock-require');
+// Load the test configuration
 var config = require('../config-test').config;
+// Make sure the app loads test configuration by mocking the call
+mock('config', { 'config': config });
+// Require the app
 var app = require('../app');
 
 var debugUrl = config.debug.url + ':' + config.debug.port;
 
 describe('Routing', function() {
     before(function(done) {
-          // Connect to the test db and populate with dummy data
-          var url = 'mongodb://' + config.db.url + ':' + config.db.port + '/' + config.db.db;
-          MongoClient.connect(url, function(err, db) {
+            // Connect to the test db and populate with dummy data
+            var url = 'mongodb://' + config.db.url + ':' + config.db.port + '/' + config.db.db;
+            MongoClient.connect(url, function(err, db) {
                 // Delete any old data
                 db.collection('scores').deleteMany({}, function(err, results) {
                     // Re-populate the database with dummy data
@@ -42,7 +47,7 @@ describe('Routing', function() {
                         done();
                     });
                 });
-          });
+            });
     });
 
     describe('GET /scores', function() {
