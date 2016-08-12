@@ -25,12 +25,7 @@
 var should = require('should');
 var supertest = require('supertest');
 var MongoClient = require('mongodb').MongoClient;
-var mock = require('mock-require');
-// Load the test configuration
-var config = require('../config-test').config;
-// Make sure the app loads test configuration by mocking the call
-mock('config', { 'config': config });
-// Require the app
+var config = require('../config').config;
 var app = require('../app');
 
 var debugUrl = config.debug.url + ':' + config.debug.port;

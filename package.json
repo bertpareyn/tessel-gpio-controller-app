@@ -16,7 +16,6 @@
         "coveralls": "latest",
         "istanbul": "latest",
         "mocha": "latest",
-        "mock-require": "latest",
         "should": "latest",
         "supertest": "latest"
     },

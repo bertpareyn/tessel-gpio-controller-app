@@ -28,10 +28,46 @@ config.ui = {
     'path': './SpaceInvaders'
 };
 
+config.debug = {
+    'url': 'http://localhost',
+    'port': 3000
+};
+
 config.db = {
-    'url': process.env.MONGO_URL || '',
-    'port': process.env.MONGO_PORT || '',
+    'url': process.env.MONGO_URL || 'localhost',
+    'port': process.env.MONGO_PORT || '27017',
     'user': process.env.MONGO_USER || '',
     'password': process.env.MONGO_PASSWORD || '',
-    'db': process.env.MONGO_DB || ''
+    'db': process.env.MONGO_DB || 'gpiotest',
+    'dummyScores': [{
+        "displayName": "Spider Man",
+        "score": 0
+    }, {
+        "displayName": "Wolverine",
+        "score": 600
+    }, {
+        "displayName": "Hulk",
+        "score": 500
+    }, {
+        "displayName": "Thor",
+        "score": 400
+    }, {
+        "displayName": "Doctor Strange",
+        "score": 700
+    }, {
+        "displayName": "Captain America",
+        "score": 300
+    }, {
+        "displayName": "Wanda Maximoff",
+        "score": 800
+    }, {
+        "displayName": "Daredevil",
+        "score": 200
+    }, {
+        "displayName": "Iron Man",
+        "score": 900
+    }, {
+        "displayName": "Black Widow",
+        "score": 100
+    }]
 };
